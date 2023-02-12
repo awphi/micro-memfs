@@ -7,7 +7,7 @@ export interface MicroFs {
   isDirectory(path: string): boolean;
   readFile(pth: string): string | undefined;
   readDir(pth: string): string[];
-  cwd(): string;
+  cwd(pth?: string): string;
   findExecutable(prog: string): CommandFunc | undefined;
 }
 
@@ -15,6 +15,7 @@ function microfs(
   voldDefIn: { [path: string]: string } = Object.create(null),
   executablesIn: { [id: string]: CommandFunc } = Object.create(null)
 ): MicroFs {
+  // TODO maybe nice to support empty directories in the future?
   let cwd = "/";
   const volDef = Object.create(null);
   // Add our files and executables source code to the file system ensuring they're prefixed with cwd()
@@ -65,7 +66,7 @@ function microfs(
       // Unique-ify
       return [...new Set(contents)];
     },
-    cwd: (pth: string | undefined) => {
+    cwd(pth: string | undefined): string {
       if (pth !== undefined) {
         if (fs.isDirectory(pth)) {
           cwd = resolvePath(pth);
@@ -76,7 +77,7 @@ function microfs(
 
       return cwd;
     },
-    findExecutable: (prog: string): CommandFunc | null => {
+    findExecutable(prog: string): CommandFunc | null {
       if (fs.exists(prog)) {
         const exe = resolvePath(`./${prog}`);
         if (exe in executables) {

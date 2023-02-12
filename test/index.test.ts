@@ -62,4 +62,26 @@ describe("nanofs", () => {
     // Non-existent file = false
     expect(fs.isDirectory("b/q.txt")).toBe(false);
   });
+
+  describe("cwd", () => {
+    test("basic changing of cwd", () => {
+      const fs = microfs({
+        "a/t.txt": "Text",
+      });
+      expect(fs.cwd()).toBe("/");
+      fs.cwd("/a");
+      expect(fs.cwd()).toBe("/a");
+    });
+
+    test("relative changing of cwd", () => {
+      const fs = microfs({
+        "a/b/t.txt": "Text",
+      });
+      fs.cwd("/a");
+      fs.cwd("/..");
+      expect(fs.cwd()).toBe("/");
+    });
+  });
+
+  // TODO tests for all the API
 });

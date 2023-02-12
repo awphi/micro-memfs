@@ -5,6 +5,7 @@
     "lib": ["ES6"],   
     "declaration": true, 
     "outDir": "dist", 
+    "esModuleInterop": true,
     "moduleResolution": "node"
   },
   "include": [

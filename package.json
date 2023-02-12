@@ -1,8 +1,8 @@
 {
   "name": "micro-memfs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple, tiny, in-memory mock file system for all environments.",
-  "main": "dist/index.min.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/awphi/micro-memfs",
   "scripts": {

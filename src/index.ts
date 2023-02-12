@@ -18,15 +18,19 @@ function microfs(
   // TODO maybe nice to support empty directories in the future?
   let cwd = "/";
   const volDef = Object.create(null);
+
+  const prefix = (file: string): string =>
+    file.startsWith(cwd) ? file : cwd + file;
+
   // Add our files and executables source code to the file system ensuring they're prefixed with cwd()
   Object.entries({ ...voldDefIn, ...executablesIn }).forEach(([file, f]) => {
-    volDef[file.startsWith(cwd) ? file : cwd + file] = f.toString();
+    volDef[prefix(file)] = f.toString();
   });
 
   // Append cwd() to executables too and ensure object is of null prototype
   const executables: { [id: string]: CommandFunc } = Object.create(null);
   Object.entries(executablesIn).forEach(([file, f]) => {
-    executables[file.startsWith(cwd) ? file : cwd + file] = f;
+    executables[prefix(file)] = f;
   });
 
   function resolvePath(path: string): string {

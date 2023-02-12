@@ -6,7 +6,7 @@
     "declaration": true, 
     "outDir": "dist", 
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
   },
   "include": [
     "src/index.ts"

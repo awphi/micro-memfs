@@ -1,7 +1,7 @@
 # micro-memfs
 `micro-memfs` is a tiny in-memory "file system" for use in a simple applications that need a mocked file system i.e. unit testing, web apps or games.
 
-- **Small** 23 bytes (minified and gzipped). [Size Limit](https://github.com/ai/size-limit) controls the size.
+- **Small** ~1kB. [Size Limit](https://github.com/ai/size-limit) controls the size.
 - **Self-contained** No dependencies. All utilities are managed internally (i.e. no reliance on `process.cwd()`)
 - **Simple** For quick, small fake file systems there's no need for a fully mocked test-focused library weighing multiple kilobytes.
 

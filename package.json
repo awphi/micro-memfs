@@ -1,7 +1,7 @@
 {
-  "name": "nanofs",
+  "name": "micro-memfs",
   "version": "1.0.0",
-  "description": "A tiny in-memory mock file system for the browser",
+  "description": "A simple, tiny, in-memory mock file system for all environments.",
   "main": "dist/index.min.js",
   "types": "dist/index.d.ts",
   "scripts": {

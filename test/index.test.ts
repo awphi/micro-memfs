@@ -1,37 +1,37 @@
-import nanofs from "../src/index";
+import microfs from "../src/index";
 
 describe("nanofs", () => {
   describe("exists", () => {
     test("simple exists", () => {
-      const fs = nanofs({
+      const fs = microfs({
         "a.txt": "Text",
       });
       expect(fs.exists("a.txt")).toBe(true);
       expect(fs.exists("b.txt")).toBe(false);
     });
     test("nested exists", () => {
-      const fs = nanofs({
+      const fs = microfs({
         "/b/c/d/a.txt": "Text",
       });
       expect(fs.exists("b/c/d/a.txt")).toBe(true);
       expect(fs.exists("b/c/d/n.txt")).toBe(false);
     });
     test("directory exists", () => {
-      const fs = nanofs({
+      const fs = microfs({
         "/b/c/d/a.txt": "Text",
       });
       expect(fs.exists("b")).toBe(true);
       expect(fs.exists("c")).toBe(false);
     });
     test("nested directory exists", () => {
-      const fs = nanofs({
+      const fs = microfs({
         "/b/c/d/a.txt": "Text",
       });
       expect(fs.exists("b/c/d")).toBe(true);
       expect(fs.exists("b/c/e")).toBe(false);
     });
     test("executable exists", () => {
-      const fs = nanofs(
+      const fs = microfs(
         {},
         {
           a: () => ["output"],
@@ -43,7 +43,7 @@ describe("nanofs", () => {
   });
 
   test("isDirectory", () => {
-    const fs = nanofs(
+    const fs = microfs(
       {
         "/b/c.txt": "Text",
       },

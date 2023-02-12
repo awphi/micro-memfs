@@ -2,7 +2,7 @@ import { resolve, parse } from "./path";
 
 export type CommandFunc = (args: string[]) => string[] | Promise<string[]>;
 
-export interface NanoFs {
+export interface MicroFs {
   exists(path: string): boolean;
   isDirectory(path: string): boolean;
   readFile(pth: string): string | undefined;
@@ -11,10 +11,10 @@ export interface NanoFs {
   findExecutable(prog: string): CommandFunc | undefined;
 }
 
-function nanofs(
+function microfs(
   voldDefIn: { [path: string]: string } = Object.create(null),
   executablesIn: { [id: string]: CommandFunc } = Object.create(null)
-): NanoFs {
+): MicroFs {
   const cwd = "/";
   const volDef = Object.create(null);
   // Add our files and executables source code to the file system ensuring they're prefixed with cwd()
@@ -35,7 +35,6 @@ function nanofs(
   const fs = {
     exists(pth: string): boolean {
       const res = resolvePath(pth);
-      console.log(volDef, res);
       // Resolve all the unique directories present in the volume definition
       const dirs = [...new Set(Object.keys(volDef).map((d) => parse(d).dir))];
       return (
@@ -81,4 +80,4 @@ function nanofs(
   return fs;
 }
 
-export { nanofs as default };
+export { microfs as default };

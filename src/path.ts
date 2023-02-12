@@ -1,7 +1,7 @@
-const CHAR_FORWARD_SLASH = 47; /* / */
-const CHAR_DOT = 46; /* . */
+export const CHAR_FORWARD_SLASH = 47; /* / */
+export const CHAR_DOT = 46; /* . */
 
-function normalizeString(
+export function normalizeString(
   path: string,
   allowAboveRoot: boolean,
   separator: string
@@ -67,32 +67,20 @@ function normalizeString(
   return res;
 }
 
-export function resolve(args: string[], cwd: string) {
-  let resolvedPath = "";
-  let resolvedAbsolute = false;
-
-  for (let i = args.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    const path = i >= 0 ? args[i] : cwd;
-
-    // Skip empty entries
-    if (path.length === 0) {
-      continue;
-    }
-
-    resolvedPath = `${path}/${resolvedPath}`;
-    resolvedAbsolute = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute, "/");
-
-  if (resolvedAbsolute) {
-    return `/${resolvedPath}`;
-  }
-  return resolvedPath.length > 0 ? resolvedPath : ".";
+export function resolve(pth: string, cwd: string) {
+  const resolvedAbsolute =
+    pth.charCodeAt(0) === CHAR_FORWARD_SLASH ||
+    cwd.charCodeAt(0) === CHAR_FORWARD_SLASH;
+  const resolvedPath = normalizeString(
+    pth.charCodeAt(0) === CHAR_FORWARD_SLASH ? pth : cwd + "/" + pth,
+    !resolvedAbsolute,
+    "/"
+  );
+  return resolvedAbsolute
+    ? `/${resolvedPath}`
+    : resolvedPath.length > 0
+    ? resolvedPath
+    : ".";
 }
 
 export interface PathObject {
@@ -105,7 +93,6 @@ export interface PathObject {
 
 export function parse(path: string): PathObject {
   const ret = { root: "", dir: "", base: "", ext: "", name: "" };
-  if (path.length === 0) return ret;
   const isAbsolute = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
   let start;
   if (isAbsolute) {

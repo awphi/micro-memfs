@@ -1,6 +1,6 @@
 {
   "name": "micro-memfs",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A simple, tiny, in-memory mock file system for all environments.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

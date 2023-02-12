@@ -33,13 +33,9 @@ function microfs(
     executables[prefix(file)] = f;
   });
 
-  function resolvePath(path: string): string {
-    return resolve([path], cwd);
-  }
-
   const fs = {
     exists(pth: string): boolean {
-      const res = resolvePath(pth);
+      const res = resolve(pth, cwd);
       // Resolve all the unique directories present in the volume definition
       const dirs = [...new Set(Object.keys(volDef).map((d) => parse(d).dir))];
       return (
@@ -50,14 +46,14 @@ function microfs(
     },
     isDirectory(pth: string): boolean {
       // Naive as hell but works for now
-      const res = resolvePath(pth);
+      const res = resolve(pth, cwd);
       return fs.exists(pth) && !res.includes(".") && !(res in executables);
     },
     readFile(pth: string): string | undefined {
-      return volDef[resolvePath(pth)];
+      return volDef[resolve(pth, cwd)];
     },
     readDir(pth: string): string[] {
-      const res = resolvePath(pth);
+      const res = resolve(pth, cwd);
       const contents = Object.keys(volDef)
         .filter((a) => a.startsWith(res))
         .map((a) => {
@@ -73,7 +69,7 @@ function microfs(
     cwd(pth: string | undefined): string {
       if (pth !== undefined) {
         if (fs.isDirectory(pth)) {
-          cwd = resolvePath(pth);
+          cwd = resolve(pth, cwd);
         } else {
           throw new Error(`Cannot set cwd to non-existent directory: ${pth}`);
         }
@@ -83,7 +79,7 @@ function microfs(
     },
     findExecutable(prog: string): CommandFunc | null {
       if (fs.exists(prog)) {
-        const exe = resolvePath(`./${prog}`);
+        const exe = resolve(`./${prog}`, cwd);
         if (exe in executables) {
           return executables[exe];
         }

@@ -4,6 +4,7 @@
   "description": "A simple, tiny, in-memory mock file system for all environments.",
   "main": "dist/index.min.js",
   "types": "dist/index.d.ts",
+  "homepage": "https://github.com/awphi/micro-memfs",
   "scripts": {
     "build": "tsc && esbuild src/index.ts --bundle --outdir=dist --minify --target=es2020,edge88,firefox78,chrome87,safari14",
     "test": "jest",
@@ -15,7 +16,7 @@
     "memory fs",
     "browser fs"
   ],
-  "author": "adamwph (awphi)",
+  "author": "adamwph/awphi (https://adamw.ph)",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.4.0",

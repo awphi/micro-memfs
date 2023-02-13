@@ -1,11 +1,7 @@
 export const CHAR_FORWARD_SLASH = 47; /* / */
 export const CHAR_DOT = 46; /* . */
 
-export function normalizeString(
-  path: string,
-  allowAboveRoot: boolean,
-  separator: string
-): string {
+export function normalizeString(path: string, allowAboveRoot: boolean): string {
   let res = "";
   let lastSegmentLength = 0;
   let lastSlash = -1;
@@ -27,13 +23,13 @@ export function normalizeString(
           res.charCodeAt(res.length - 2) !== CHAR_DOT
         ) {
           if (res.length > 2) {
-            const lastSlashIndex = res.lastIndexOf(separator);
+            const lastSlashIndex = res.lastIndexOf("/");
             if (lastSlashIndex === -1) {
               res = "";
               lastSegmentLength = 0;
             } else {
               res = res.slice(0, lastSlashIndex);
-              lastSegmentLength = res.length - 1 - res.lastIndexOf(separator);
+              lastSegmentLength = res.length - 1 - res.lastIndexOf("/");
             }
             lastSlash = i;
             dots = 0;
@@ -47,12 +43,11 @@ export function normalizeString(
           }
         }
         if (allowAboveRoot) {
-          res += res.length > 0 ? `${separator}..` : "..";
+          res += res.length > 0 ? `/..` : "..";
           lastSegmentLength = 2;
         }
       } else {
-        if (res.length > 0)
-          res += `${separator}${path.slice(lastSlash + 1, i)}`;
+        if (res.length > 0) res += `/${path.slice(lastSlash + 1, i)}`;
         else res = path.slice(lastSlash + 1, i);
         lastSegmentLength = i - lastSlash - 1;
       }
@@ -73,8 +68,7 @@ export function resolve(pth: string, cwd: string) {
     cwd.charCodeAt(0) === CHAR_FORWARD_SLASH;
   const resolvedPath = normalizeString(
     pth.charCodeAt(0) === CHAR_FORWARD_SLASH ? pth : cwd + "/" + pth,
-    !resolvedAbsolute,
-    "/"
+    !resolvedAbsolute
   );
   return resolvedAbsolute
     ? `/${resolvedPath}`

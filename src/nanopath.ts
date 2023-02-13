@@ -25,18 +25,6 @@
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
  */
-const FALLBACK_MATCH = ["", "", "", "", ""];
-
-const findLastIndex = <T>(
-  arr: ArrayLike<T>,
-  iterator: (value: T, index: number, arr: ArrayLike<T>) => boolean
-): number => {
-  for (let i = arr.length - 1; i >= 0; i--) {
-    if (iterator(arr[i], i, arr)) return i;
-  }
-
-  return -1;
-};
 
 type PathObject = {
   root: string;
@@ -45,6 +33,17 @@ type PathObject = {
   name: string;
   ext: string;
 };
+
+function findLastIndex<T>(
+  arr: ArrayLike<T>,
+  iterator: (value: T, index: number, arr: ArrayLike<T>) => boolean
+): number {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (iterator(arr[i], i, arr)) return i;
+  }
+
+  return -1;
+}
 
 function isAbsolute(path: string): boolean {
   return path.startsWith("/");
@@ -80,7 +79,7 @@ function normalize(path: string): string {
 export function parse(path: string): PathObject {
   const re =
     /^((\/?)(?:.*(?=\/+[^\/]))?)\/?((\.?(?:.+(?=\.)|\.(?=\/|$)|[^\.\/]*))((?:\.[^\/]*)?))\/*$/;
-  const match = re.exec(path) || FALLBACK_MATCH;
+  const match = re.exec(path) || ["", "", "", "", ""];
   const [, dir, root, base, name, ext] = match;
 
   return { root, dir, base, name, ext };

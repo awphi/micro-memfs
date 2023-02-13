@@ -21,7 +21,7 @@ function resolveOld(args: string[], cwd: string) {
   // handle relative paths to be safe (might happen when process.cwd() fails)
 
   // Normalize the path
-  resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute, "/");
+  resolvedPath = normalizeString(resolvedPath, !resolvedAbsolute);
 
   if (resolvedAbsolute) {
     return `/${resolvedPath}`;

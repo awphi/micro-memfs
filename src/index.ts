@@ -1,4 +1,4 @@
-import { resolve, parse } from "./path";
+import { resolve, parse } from "./nanopath";
 
 export type CommandFunc = (args: string[]) => string[] | Promise<string[]>;
 
@@ -35,7 +35,7 @@ function microfs(
 
   const fs = {
     exists(pth: string): boolean {
-      const res = resolve(pth, cwd);
+      const res = resolve(cwd, pth);
       // Resolve all the unique directories present in the volume definition
       const dirs = [...new Set(Object.keys(volDef).map((d) => parse(d).dir))];
       return (
@@ -46,14 +46,14 @@ function microfs(
     },
     isDirectory(pth: string): boolean {
       // Naive as hell but works for now
-      const res = resolve(pth, cwd);
+      const res = resolve(cwd, pth);
       return fs.exists(pth) && !res.includes(".") && !(res in executables);
     },
     readFile(pth: string): string | undefined {
-      return volDef[resolve(pth, cwd)];
+      return volDef[resolve(cwd, pth)];
     },
     readDir(pth: string): string[] {
-      const res = resolve(pth, cwd);
+      const res = resolve(cwd, pth);
       const contents = Object.keys(volDef)
         .filter((a) => a.startsWith(res))
         .map((a) => {
@@ -69,7 +69,7 @@ function microfs(
     cwd(pth: string | undefined): string {
       if (pth !== undefined) {
         if (fs.isDirectory(pth)) {
-          cwd = resolve(pth, cwd);
+          cwd = resolve(cwd, pth);
         } else {
           throw new Error(`Cannot set cwd to non-existent directory: ${pth}`);
         }

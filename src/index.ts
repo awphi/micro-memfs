@@ -8,7 +8,7 @@ export interface MicroFs {
   readFile(pth: string): string | undefined;
   readDir(pth: string): string[];
   cwd(pth?: string): string;
-  findExecutable(prog: string): CommandFunc | undefined;
+  findExecutable(prog: string): CommandFunc | null;
 }
 
 function microfs(
@@ -79,7 +79,7 @@ function microfs(
     },
     findExecutable(prog: string): CommandFunc | null {
       if (fs.exists(prog)) {
-        const exe = resolve(`./${prog}`, cwd);
+        const exe = resolve(cwd, prog);
         if (exe in executables) {
           return executables[exe];
         }

@@ -83,5 +83,32 @@ describe("nanofs", () => {
     });
   });
 
+  test("readme example", () => {
+    const fs = microfs(
+      {
+        "usr/file.txt": "Some text content",
+      },
+      {
+        "usr/emphasize": (args) => args.concat(["!"]),
+      }
+    );
+
+    expect(fs.cwd()).toBe("/");
+    expect(fs.exists("usr")).toBe(true);
+    expect(fs.isDirectory("usr")).toBe(true);
+    expect(fs.cwd("usr")).toBe("/usr");
+    expect(() => fs.cwd("another-dir")).toThrow();
+    expect(fs.readFile("file.txt")).toBe("Some text content");
+    expect(fs.readFile("emphasize")).toBe('(args) => args.concat(["!"])');
+
+    const emphasize = fs.findExecutable("emphasize");
+    expect(emphasize).not.toBeNull();
+    expect(emphasize!(["hello", "world"])).toMatchObject([
+      "hello",
+      "world",
+      "!",
+    ]);
+  });
+
   // TODO tests for all the API
 });
